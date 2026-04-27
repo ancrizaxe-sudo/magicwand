@@ -19,5 +19,6 @@ torchvision==0.24.0
 tqdm==4.67.3
 web3==7.15.0
 eth-account==0.13.7
+eth-tester==0.13.0b1
 eth-typing==6.0.0
 eth-utils==6.0.0
