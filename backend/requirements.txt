@@ -102,7 +102,7 @@ platformdirs==4.9.6
 pluggy==1.6.0
 propcache==0.4.1
 proto-plus==1.27.2
-protobuf==5.29.6
+protobuf
 py-ecc==8.0.0
 py-evm==0.12.1b1
 pyasn1==0.6.3
