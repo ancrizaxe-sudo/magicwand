@@ -1,0 +1,312 @@
+{
+  "structured_ablation": [
+    {
+      "method": "Constant IPCC factor (no spatial/temporal)",
+      "family": "baseline",
+      "rmse": 8695.908923166111,
+      "mae": 6064.04345703125,
+      "r2": -9.989700317382812,
+      "spearman": 0.22765406954052902
+    },
+    {
+      "method": "NDVI-difference",
+      "family": "baseline",
+      "rmse": 1949.978653729317,
+      "mae": 1057.593017578125,
+      "r2": 0.4473939538002014,
+      "spearman": 0.4353027398749765
+    },
+    {
+      "method": "NDVI + smoothing",
+      "family": "strong baseline",
+      "rmse": 2274.900986856351,
+      "mae": 1237.2171630859375,
+      "r2": 0.24789083003997803,
+      "spearman": 0.2904024269822691
+    },
+    {
+      "method": "NDVI + clustering",
+      "family": "strong baseline",
+      "rmse": 1459.0639350837168,
+      "mae": 702.0869465118578,
+      "r2": 0.6906112528624544,
+      "spearman": 0.6790805646461493
+    },
+    {
+      "method": "NDVI + temporal averaging",
+      "family": "strong baseline",
+      "rmse": 2071.8782541452574,
+      "mae": 1123.4425048828125,
+      "r2": 0.37614405155181885,
+      "spearman": 0.4373571676297846
+    },
+    {
+      "method": "AVLE + spatial",
+      "family": "avle progression",
+      "rmse": 1611.7813902635803,
+      "mae": 583.0470581054688,
+      "r2": 0.6224554777145386,
+      "spearman": 0.8062232296210446
+    },
+    {
+      "method": "AVLE + spatial + temporal",
+      "family": "avle progression",
+      "rmse": 1690.2788231531506,
+      "mae": 627.578125,
+      "r2": 0.5847854018211365,
+      "spearman": 0.7202658499840318
+    },
+    {
+      "method": "AVLE + spatial + temporal + canopy",
+      "family": "avle progression",
+      "rmse": 1830.87042141163,
+      "mae": 678.7647705078125,
+      "r2": 0.5128405690193176,
+      "spearman": 0.8692417448749792
+    },
+    {
+      "method": "AVLE+ (analytical, no ML regression)",
+      "family": "avle progression",
+      "rmse": 1726.9102449094096,
+      "mae": 711.5206842672646,
+      "r2": 0.5665935201024076,
+      "spearman": 0.6438544445408054
+    },
+    {
+      "method": "AVLE-C full (ML-regressed)",
+      "family": "full system",
+      "rmse": 364.8849095630926,
+      "mae": 104.55850613072934,
+      "r2": 0.9806505923760902,
+      "spearman": 0.9963248169907581
+    }
+  ],
+  "neutral_ablation": [
+    {
+      "method": "Constant IPCC factor (no spatial/temporal)",
+      "family": "baseline",
+      "rmse": 8232.906655610763,
+      "mae": 5538.1240234375,
+      "r2": -3.8007521629333496,
+      "spearman": 0.2635165179370595
+    },
+    {
+      "method": "NDVI-difference",
+      "family": "baseline",
+      "rmse": 3370.1471777950587,
+      "mae": 1973.68994140625,
+      "r2": 0.19554710388183594,
+      "spearman": 0.43930683367663104
+    },
+    {
+      "method": "NDVI + smoothing",
+      "family": "strong baseline",
+      "rmse": 3427.4252727083635,
+      "mae": 2131.900146484375,
+      "r2": 0.16797012090682983,
+      "spearman": 0.31571370622097095
+    },
+    {
+      "method": "NDVI + clustering",
+      "family": "strong baseline",
+      "rmse": 3228.9346387577602,
+      "mae": 1746.6103858792399,
+      "r2": 0.2615494718179674,
+      "spearman": 0.41282123817618466
+    },
+    {
+      "method": "NDVI + temporal averaging",
+      "family": "strong baseline",
+      "rmse": 4153.819447207594,
+      "mae": 2305.084716796875,
+      "r2": -0.22207581996917725,
+      "spearman": 0.4421526954598932
+    },
+    {
+      "method": "AVLE + spatial",
+      "family": "avle progression",
+      "rmse": 2129.9683096234085,
+      "mae": 916.9992065429688,
+      "r2": 0.6786715984344482,
+      "spearman": 0.8105207819419014
+    },
+    {
+      "method": "AVLE + spatial + temporal",
+      "family": "avle progression",
+      "rmse": 2155.1776028903046,
+      "mae": 933.40087890625,
+      "r2": 0.6710203886032104,
+      "spearman": 0.7616979465219343
+    },
+    {
+      "method": "AVLE + spatial + temporal + canopy",
+      "family": "avle progression",
+      "rmse": 2375.599924229667,
+      "mae": 978.7855834960938,
+      "r2": 0.6002858877182007,
+      "spearman": 0.9096055679251058
+    },
+    {
+      "method": "AVLE+ (analytical, no ML regression)",
+      "family": "avle progression",
+      "rmse": 2113.250942618989,
+      "mae": 887.1719848649794,
+      "r2": 0.6836957405730512,
+      "spearman": 0.8632101012992135
+    },
+    {
+      "method": "AVLE-C full (ML-regressed)",
+      "family": "full system",
+      "rmse": 695.3218196588166,
+      "mae": 261.37991582801675,
+      "r2": 0.9657567786123173,
+      "spearman": 0.9908771227046861
+    }
+  ],
+  "segmentation": {
+    "n": 24,
+    "ndvi_iou": 0.9568659194852144,
+    "unet_iou": 0.9413833618164062,
+    "delta_iou": -0.015482557668808128
+  },
+  "recommendation": {
+    "rule_based_f1": 0.7467094085490039,
+    "rule_based_acc": 0.7638,
+    "mlp_f1": 0.8010223156364517,
+    "mlp_acc": 0.8112
+  },
+  "projection": {
+    "xgb_rmse": 17.299808653511178,
+    "xgb_sss": 0.01570321423343626,
+    "linreg_rmse": 21.617956635280084,
+    "linreg_sss": 0.050445614156948926,
+    "arima": {
+      "rmse": 16.22675213773935,
+      "mae": 14.424254462882748,
+      "sss": 0.10003602295913616,
+      "n": 80
+    }
+  },
+  "table": [
+    {
+      "method": "Constant IPCC factor (no spatial/temporal)",
+      "family": "baseline",
+      "rmse": 8695.908923166111,
+      "mae": 6064.04345703125,
+      "r2": -9.989700317382812,
+      "spearman": 0.22765406954052902,
+      "iou": null
+    },
+    {
+      "method": "NDVI-difference",
+      "family": "baseline",
+      "rmse": 1949.978653729317,
+      "mae": 1057.593017578125,
+      "r2": 0.4473939538002014,
+      "spearman": 0.4353027398749765,
+      "iou": null
+    },
+    {
+      "method": "NDVI + smoothing",
+      "family": "strong baseline",
+      "rmse": 2274.900986856351,
+      "mae": 1237.2171630859375,
+      "r2": 0.24789083003997803,
+      "spearman": 0.2904024269822691,
+      "iou": null
+    },
+    {
+      "method": "NDVI + clustering",
+      "family": "strong baseline",
+      "rmse": 1459.0639350837168,
+      "mae": 702.0869465118578,
+      "r2": 0.6906112528624544,
+      "spearman": 0.6790805646461493,
+      "iou": null
+    },
+    {
+      "method": "NDVI + temporal averaging",
+      "family": "strong baseline",
+      "rmse": 2071.8782541452574,
+      "mae": 1123.4425048828125,
+      "r2": 0.37614405155181885,
+      "spearman": 0.4373571676297846,
+      "iou": null
+    },
+    {
+      "method": "AVLE + spatial",
+      "family": "avle progression",
+      "rmse": 1611.7813902635803,
+      "mae": 583.0470581054688,
+      "r2": 0.6224554777145386,
+      "spearman": 0.8062232296210446,
+      "iou": null
+    },
+    {
+      "method": "AVLE + spatial + temporal",
+      "family": "avle progression",
+      "rmse": 1690.2788231531506,
+      "mae": 627.578125,
+      "r2": 0.5847854018211365,
+      "spearman": 0.7202658499840318,
+      "iou": null
+    },
+    {
+      "method": "AVLE + spatial + temporal + canopy",
+      "family": "avle progression",
+      "rmse": 1830.87042141163,
+      "mae": 678.7647705078125,
+      "r2": 0.5128405690193176,
+      "spearman": 0.8692417448749792,
+      "iou": null
+    },
+    {
+      "method": "AVLE+ (analytical, no ML regression)",
+      "family": "avle progression",
+      "rmse": 1726.9102449094096,
+      "mae": 711.5206842672646,
+      "r2": 0.5665935201024076,
+      "spearman": 0.6438544445408054,
+      "iou": null
+    },
+    {
+      "method": "AVLE-C full (ML-regressed)",
+      "family": "full system",
+      "rmse": 364.8849095630926,
+      "mae": 104.55850613072934,
+      "r2": 0.9806505923760902,
+      "spearman": 0.9963248169907581,
+      "iou": null
+    },
+    {
+      "method": "NDVI threshold (segmentation baseline)",
+      "family": "segmentation",
+      "rmse": null,
+      "mae": null,
+      "r2": null,
+      "spearman": null,
+      "iou": 0.9568659194852144
+    },
+    {
+      "method": "U-Net (trained, segmentation)",
+      "family": "segmentation",
+      "rmse": null,
+      "mae": null,
+      "r2": null,
+      "spearman": null,
+      "iou": 0.9413833618164062
+    }
+  ],
+  "meta": {
+    "metrics": [
+      "rmse",
+      "mae",
+      "r2",
+      "spearman (\u03c1\u00b2)",
+      "iou (segmentation only)"
+    ],
+    "note_structured": "spatial clusters + canopy density + temporal drift",
+    "note_neutral": "random NDVI with no structure \u2014 null regime",
+    "n_carbon_samples_per_regime": 5000
+  }
+}

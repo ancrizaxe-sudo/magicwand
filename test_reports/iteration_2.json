@@ -1,0 +1,35 @@
+{
+  "summary": "Iteration 2 — validated scientific-quality upgrades: CSI bounded [0,1], two-regime ablation, NDVI z-score normalization, MC-dropout recommender, 3-scenario cumulative emissions, draggable bbox + geolocation. 19/19 pytest cases pass; all 6 frontend pages load with zero JS errors; Analyze pipeline produces realistic (<1.0) MC-dropout confidence of 95.6% and 3.6% epistemic uncertainty, 25 passes, annual+cumulative charts with BAU/If followed/If not followed, 3 images, blockchain receipt. /ablation page regime toggle verified — 7 rows, 5-metric columns, switching buttons swaps table content between structured and neutral.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Analyze / ResultsPanel", "issues": ["Recharts briefly emits 'width(-1)/height(-1)' console warnings on initial results mount before layout settles. Non-blocking, purely cosmetic. Consider setting explicit minHeight on ResponsiveContainer wrappers."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/pytest/test_avle_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py still uses deprecated FastAPI @app.on_event('startup'/'shutdown') hooks — migrate to lifespan context manager (carry-over from iter 1).",
+    "AnalyzeResponse Pydantic model declared but /api/analyze returns a raw dict — wire it with response_model or remove (carry-over).",
+    "/api/analyze catches all exceptions -> HTTP 503 — bad-bbox/date ValueError should map to 400 (carry-over).",
+    "Analyze default size is now 384 — for use_synthetic=true this is fine (<2s), but real-data calls with 384 may be slower; consider separate defaults for synthetic vs real, or document the expected latency."
+  ],
+  "updated_files": [
+    "/app/backend/tests/pytest/test_avle_backend.py (expanded from 13 → 19 tests with new scientific-quality assertions)"
+  ],
+  "success_rate": {"backend": "100% (19/19)", "frontend": "100%"},
+  "test_credentials": "none required (no auth in this app)",
+  "seed_data_creation": "none; tests insert one analyze doc into MongoDB db.analyses each run (cleanup not needed for MVP).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend base URL = https://emission-estimator.preview.emergentagent.com (pytest requires REACT_APP_BACKEND_URL env var — see fixture). Use use_synthetic=true for <2s analyze calls (size=128 in tests for extra speed, default schema size=384). New fields validated on /api/analyze: ndvi_normalised (true), carbon_scenario_unchecked (5), carbon_cumulative_{bau,mitigation,unchecked} (monotonic, unchecked>=bau>=mitigation), scenario_separation_score, intervention_factor, recommendation.class_probabilities_std (4), recommendation.epistemic_uncertainty (0..1), recommendation.mc_passes (25), recommendation.confidence (<1.0, ~0.95). /api/ablation returns structured_ablation + neutral_ablation (7 each), table (9 rows), meta. CSI/Spearman bounded in [0,1] across both regimes. Structured: constant R²<0, NDVI-diff R²~0.45, AVLE-C full R²~0.98, RMSE<500. Neutral: NDVI-diff and AVLE+ both in 2000-3500 RMSE band (no structural gain, as designed). Frontend testids verified: ablation-regime-structured, ablation-regime-neutral, ablation-table, locate-btn, mode-click-btn, synthetic-toggle, run-analysis-btn, results-panel, img-ndvi-{t1,t2}, img-loss, rec-action, chain-tx, region-hash. 4 leaflet draggable bbox corners present on Analyze map. synthetic-toggle is UNCHECKED by default — tests must check it before clicking run-analysis-btn.",
+  "rca of the issue": "No issues found. All scientific-quality upgrades verified end-to-end."
+}

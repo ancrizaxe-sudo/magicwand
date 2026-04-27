@@ -1,0 +1,40 @@
+{
+  "summary": "Iteration 3 — validated v3 upgrades (real U-Net, strong baselines, segmentation IoU, docs browser, region suitability gate, CSI removed). 19/20 backend pytest cases pass; 1 failure on water-bbox suitability gate. All frontend pages load cleanly: nav has Docs and Datasets removed; /ablation shows 10 rows per regime with Family badges and NO CSI column; U-Net IoU segmentation panel visible; /docs sidebar has 6 links and markdown renders in doc-article; /analyze has 5 preset buttons, locate-btn, synthetic-toggle, run-analysis-btn → results-panel with 3-scenario + cumulative charts.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "/api/analyze (bbox=[0,0,0.1,0.1] use_synthetic=false)", "issue": "Water/ocean bbox returns suitability={suitable:true, mean_ndvi:0.56, water_fraction:0.0} instead of suitable=false. Likely cause: real Sentinel-2 for ocean tile in Gulf of Guinea has no cloud-free data so fetch_scene falls back to synthetic generator which produces vegetated NDVI regardless of bbox — the suitability gate never sees water pixels. assess_region_suitability() thresholds (water_frac>0.65) are correct, but the synthetic fallback hides the real water signal. Expected: carbon_estimate_tco2=0 and reason string. Actual: suitable=true, full carbon calculation runs.", "priority": "HIGH"}
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/analyze results", "issues": ["Recharts emits multiple 'width(-1) and height(-1) of chart should be greater than 0' warnings on initial results mount (carry-over from iter2, still not fixed). Non-blocking cosmetic."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/pytest/test_avle_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix water-bbox suitability gate: when fetch_scene falls back to synthetic scene for a real Sentinel-2 request that returned no data, either (a) mark the scene as 'no-data' and short-circuit to suitability={suitable:false, reason:'no valid Sentinel-2 observations'}, or (b) make the synthetic fallback honour the bbox semantics (water = low NDVI) instead of always generating vegetation. Current behaviour silently masks ocean/snow regions."
+  ],
+  "critical_code_review_comments": [
+    "server.py still uses deprecated @app.on_event('startup'/'shutdown') — migrate to lifespan context manager (carry-over from iter 1 & 2).",
+    "AnalyzeResponse Pydantic model declared but /api/analyze returns a raw dict — wire response_model or remove (carry-over).",
+    "/api/analyze catches all exceptions → HTTP 503 (bad-bbox/date ValueError should map to 400) (carry-over).",
+    "pipeline.py fetch fallback is silent — when Sentinel-2 returns no data the scene is replaced by synthetic without surfacing source='synthetic-fallback' in the response, making the water-bbox edge case impossible to trigger in production. Consider returning data_source in the API response and gating suitability on it.",
+    "Recharts ResponsiveContainer width(-1) warnings persist on Analyze results — should set explicit minHeight on wrapper divs."
+  ],
+  "updated_files": [
+    "/app/backend/tests/pytest/test_avle_backend.py (rewritten for iter 3: removed CSI assertions, added 10-row / family-field / segmentation-IoU / linreg-rmse / 3-scenario / suitability / docs endpoint assertions; 20 tests total)"
+  ],
+  "success_rate": {"backend": "95% (19/20)", "frontend": "100%"},
+  "test_credentials": "none required (no auth)",
+  "seed_data_creation": "none; tests POST one analyze doc into db.analyses per run.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "BASE_URL = https://emission-estimator.preview.emergentagent.com. Run: REACT_APP_BACKEND_URL=<url> pytest /app/backend/tests/pytest/test_avle_backend.py -v. v3 ablation returns structured_ablation(10) + neutral_ablation(10) + segmentation{n,ndvi_iou,unet_iou,delta_iou} + projection{xgb_rmse,linreg_rmse,arima} + table(12 rows incl 2 seg rows); rows have {method, family (baseline|strong baseline|avle progression|full system), rmse, mae, r2, spearman} — NO csi. Full-ML R²=0.981 RMSE=364.9. Segmentation observed: n=24 ndvi_iou=0.957 unet_iou=0.941 (U-Net slightly underperforms NDVI baseline on the 24 real ESA WorldCover patches — acceptable but noteworthy). /api/docs returns 6 entries (setup, project-evolution, research-paper-guide, model-training-guide, data-guide, interview-prep); /api/docs/{slug} returns {slug,title,filename,markdown}; unknown slug → 404. Frontend testids verified: ablation-regime-structured, ablation-regime-neutral, preset-0..4, locate-btn, synthetic-toggle, run-analysis-btn, results-panel, doc-link-*, doc-article. Nav has NO Datasets link and DOES have Docs link (verified). The single failing test is water-bbox suitability — see action_items. The rendered /ablation page correctly has no CSI column; the literal string 'CSI' only appears in the explanatory caption 'CSI removed — it mixed magnitude with correlation...' which is intentional.",
+  "rca of the issue": "Water-bbox suitability failure RCA: repro = POST /api/analyze with bbox=[0,0,0.1,0.1] and use_synthetic=false. Expected suitability.suitable=false + carbon=0 (ocean tile). Observed suitable=true, mean_ndvi=0.56, water_fraction=0.0. Root cause: avle/fetch.py::fetch_scene silently falls back to _synthetic_scene when Sentinel-2 returns no observations; the synthetic generator produces vegetated NDVI regardless of bbox, so pipeline.analyse never sees the underlying water pixels and the otherwise-correct assess_region_suitability() gate in avle/utils.py:146 cannot trip. Mitigation: either (1) have fetch_scene return a sentinel 'no_data' status that pipeline.analyse maps to suitability={suitable:false, reason:'no valid S2 observations'}, or (2) make _synthetic_scene consult bbox latitudes to emit water-like NDVI<0 for known ocean lat/lon ranges. Option 1 is cleaner and avoids false positives for snow/desert bboxes too."
+}

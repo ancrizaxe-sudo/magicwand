@@ -1,0 +1,18 @@
+{
+  "architecture": "MLP 128\u219264\u219232\u21924",
+  "input_features": [
+    "avle_plus_normalized",
+    "ndvi_mean_t2",
+    "loss_area_ha_log",
+    "delta_ndvi_mean",
+    "delta_ndvi_std",
+    "temporal_factor_mean"
+  ],
+  "classes": [
+    "monitoring_only",
+    "targeted_replanting",
+    "assisted_regeneration",
+    "critical_afforestation"
+  ],
+  "best_val_loss": 0.4135768761237462
+}
