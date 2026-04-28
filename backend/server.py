@@ -40,9 +40,17 @@ logging.basicConfig(level=logging.INFO,
 log = logging.getLogger("avle")
 
 # ---------------- Mongo ---------------- #
-mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ["DB_NAME"]]
+try:
+    mongo_url = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+    client = AsyncIOMotorClient(mongo_url)
+    db = client[os.environ.get("DB_NAME", "avle")]
+    # Test connection
+    client.admin.command('ping')
+    log.info("MongoDB connected successfully")
+except Exception as e:
+    log.warning("MongoDB not available, job persistence disabled: %s", e)
+    client = None
+    db = None
 
 # ---------------- App ---------------- #
 app = FastAPI(title="AVLE-C API", version="1.0.0")
@@ -103,15 +111,18 @@ async def analyze(req: AnalyzeRequest) -> dict:
     }
     result["id"] = doc["id"]
     result["created_at"] = doc["created_at"]
-    try:
-        await db.analyses.insert_one(doc.copy())
-    except Exception as e:
-        log.warning("failed to persist analysis to MongoDB: %s", e)
+    if db is not None:
+        try:
+            await db.analyses.insert_one(doc.copy())
+        except Exception as e:
+            log.warning("failed to persist analysis to MongoDB: %s", e)
     return result
 
 
 @api.get("/jobs")
 async def list_jobs(limit: int = 50) -> List[dict]:
+    if db is None:
+        return []
     cursor = db.analyses.find({}, {"_id": 0, "result.images": 0}) \
                         .sort("created_at", -1).limit(limit)
     return await cursor.to_list(length=limit)
@@ -119,6 +130,8 @@ async def list_jobs(limit: int = 50) -> List[dict]:
 
 @api.get("/jobs/{job_id}")
 async def get_job(job_id: str) -> dict:
+    if db is None:
+        raise HTTPException(status_code=404, detail="Job not found")
     doc = await db.analyses.find_one({"id": job_id}, {"_id": 0})
     if not doc:
         raise HTTPException(status_code=404, detail="Job not found")
