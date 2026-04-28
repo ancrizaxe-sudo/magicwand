@@ -34,3 +34,13 @@ EXPOSE 10000
 
 # Run the server
 CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "10000"]
+>>>>>>> fc3c09125edee633d17968cf9bbef449cabef6f8:Dockerfile
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 10000
+
+# Run the server
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "10000"]
