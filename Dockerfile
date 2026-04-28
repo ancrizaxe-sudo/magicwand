@@ -12,19 +12,8 @@ RUN apt-get update && apt-get install -y \
 # Copy backend requirements
 COPY backend/requirements.txt .
 
-# Install Python dependencies (excluding problematic packages)
-RUN pip install --no-cache-dir \
-    fastapi \
-    uvicorn \
-    motor \
-    pydantic \
-    python-dotenv \
-    aiohttp \
-    numpy \
-    pandas \
-    scikit-learn \
-    xgboost \
-    pillow
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend code
 COPY backend/ .
