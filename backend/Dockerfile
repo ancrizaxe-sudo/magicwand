@@ -9,10 +9,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy backend requirements
-COPY backend/requirements.txt .
+# Copy requirements first for caching
+COPY requirements.txt .
 
-# Install Python dependencies (excluding problematic packages)
+# Install Python dependencies
 RUN pip install --no-cache-dir \
     fastapi \
     uvicorn \
@@ -26,11 +26,11 @@ RUN pip install --no-cache-dir \
     xgboost \
     pillow
 
-# Copy backend code
-COPY backend/ .
+# Copy application code
+COPY . .
 
 # Expose port
-EXPOSE 8000
+EXPOSE 10000
 
 # Run the server
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "10000"]
