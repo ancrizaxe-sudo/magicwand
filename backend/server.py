@@ -27,10 +27,10 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.cors import CORSMiddleware
 
-from avle import blockchain
-from avle.config import CONFIG
-from avle.docs_api import list_docs, read_doc
-from avle.pipeline import analyse
+from backend.avle import blockchain
+from backend.avle.config import CONFIG
+from backend.avle.docs_api import list_docs, read_doc
+from backend.avle.pipeline import analyse
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
